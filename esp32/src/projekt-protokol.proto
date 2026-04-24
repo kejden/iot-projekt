@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message StationInfo {
+  string name = 1;
+  uint32 id = 2;
+}
+
+message SensorReport {
+  StationInfo station = 1;
+  float temperature = 2;
+  float humidity = 3;
+  int32 light_level = 4;
+}
