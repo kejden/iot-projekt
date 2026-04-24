@@ -1,0 +1,43 @@
+services:
+  app:
+    build: .
+    container_name: iot_app
+    ports:
+      - "8501:8501"
+    depends_on:
+      - mosquitto
+      - timescaledb
+    environment:
+      - DB_HOST=timescaledb
+    restart: always
+
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto
+    ports:
+      - "9001:9001"
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+    restart: always
+
+  timescaledb:
+    image: timescale/timescaledb:latest-pg15-oss
+    container_name: timescaledb
+    environment:
+      - POSTGRES_DB=iot_db
+      - POSTGRES_PASSWORD=TwojeHaslo123
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - timescaledb
+    restart: always
