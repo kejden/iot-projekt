@@ -33,6 +33,7 @@ SensorReport createReport() {
   report.light_level = getLight();
   
   report.station.id = 101;
+  report.has_station = true;
   strncpy(report.station.name, "ESP32-Node-1", sizeof(report.station.name));
   
   return report;
